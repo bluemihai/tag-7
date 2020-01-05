@@ -1,0 +1,10 @@
+- if @player = current_player
+  %h2 Account Settings
+- else
+  %h2 Editing Player Account
+
+= render 'form'
+
+= link_to 'Show', @player
+\|
+= link_to 'Back', players_path

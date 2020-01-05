@@ -1,0 +1,47 @@
+- if params.has_key?(:edit) || @aktion.status == 'stopped'
+  %h5.columns.text-center BREAK ACTIVITIES
+  .large-6.medium-12.columns.countable.break-action= f.input :pushups, as: :string, label: 'push-ups', autofocus: true
+  .large-6.medium-12.columns.countable.break-action= f.input :situps, as: :string, label: 'sit-ups'
+  .large-6.medium-12.columns.countable.break-action= f.input :wallsits, as: :string, label: 'wall sits'
+  .large-6.medium-12.columns.countable.break-action= f.input :jumpjacks, as: :string, label: 'jump-jacks'
+  .large-6.medium-12.columns.countable.break-action= f.input :chairdips, as: :string, label: 'chair dips'
+  .large-6.medium-12.columns.countable.break-action= f.input :breaths, as: :string, label: 'breaths'
+  .large-6.medium-12.columns.boolean.break-action= f.input :stop, as: :boolean, label: 'break'
+  .large-6.medium-12.columns.boolean.break-action= f.input :restroom, as: :boolean, label: 'restroom'
+  .large-6.medium-12.columns.boolean.break-action= f.input :water, as: :boolean, label: 'water'
+  .large-6.medium-12.columns.boolean.break-action= f.input :snack, as: :boolean, label: 'snack'
+  .large-6.medium-12.columns.boolean.break-action= f.input :stretch, as: :boolean, label: 'stretch'
+  .large-6.medium-12.columns.boolean.break-action= f.input :tidy, as: :boolean, label: 'tidy up'
+  .large-6.medium-12.columns.boolean.break-action= f.input :games, as: :boolean, label: 'games'
+  .large-6.medium-12.columns.boolean.break-action= f.input :friends, as: :boolean, label: 'friends'
+  .large-6.medium-12.columns.boolean.break-action= f.input :music, as: :boolean, label: 'music'
+  .large-6.medium-12.columns.boolean.break-action= f.input :dancing, as: :boolean, label: 'dancing'
+  .large-6.medium-12.columns.boolean.break-action= f.input :soccer, as: :boolean, label: 'soccer'
+  .large-6.medium-12.columns.boolean.break-action= f.input :change, as: :boolean, label: 'change'
+  .large-6.medium-12.columns.boolean.break-action= f.input :reading, as: :boolean, label: 'reading'
+  .large-6.medium-12.columns.boolean.break-action= f.input :podcast, as: :boolean, label: 'podcast'
+  .large-12.medium-12.small-12.columns= f.input :intensity, collection: INTENSITIES, include_blank: true, prompt: INTENSITY_PROMPT, label: false
+  .large-12.medium-12.small-12.columns.relax-button= f.button :submit, "SAVE"
+- else
+  %h5.large-12.columns= 'BREAK ACTIVITIES' if @aktion.break_activities_recorded
+  .large-6.columns.review-item= "#{@aktion.pushups} Push-ups" if @aktion.pushups && @aktion.pushups != ''
+  .large-6.columns.review-item= "#{@aktion.situps} Sit-ups" if @aktion.situps && @aktion.situps != ''
+  .large-6.columns.review-item= "#{@aktion.wallsits} Wall Sits" if @aktion.wallsits && @aktion.wallsits != ''
+  .large-6.columns.review-item= "#{@aktion.jumpjacks} Jumping Jacks" if @aktion.jumpjacks && @aktion.jumpjacks != ''
+  .large-6.columns.review-item= "#{@aktion.breaths} Triceps Dips" if @aktion.chairdips && @aktion.chairdips != ''
+  .large-6.columns.review-item= "#{@aktion.breaths} Breaths" if @aktion.breaths && @aktion.breaths != ''
+  .large-6.columns.review-item= "#{Aktion.checkmark(@aktion.stop)} Stop" if @aktion.stop
+  .large-6.columns.review-item= "#{Aktion.checkmark(@aktion.restroom)} Restroom" if @aktion.restroom
+  .large-6.columns.review-item= "#{Aktion.checkmark(@aktion.water)} Water" if @aktion.water
+  .large-6.columns.review-item= "#{Aktion.checkmark(@aktion.snack)} Snack" if @aktion.snack
+  .large-6.columns.review-item= "#{Aktion.checkmark(@aktion.stretch)} Stretch" if @aktion.stretch
+  .large-6.columns.review-item= "#{Aktion.checkmark(@aktion.tidy)} Tidy Up" if @aktion.tidy
+  .large-6.columns.review-item= "#{Aktion.checkmark(@aktion.games)} Games" if @aktion.games
+  .large-6.columns.review-item= "#{Aktion.checkmark(@aktion.friends)} Friends" if @aktion.friends
+  .large-6.columns.review-item= "#{Aktion.checkmark(@aktion.music)} Music" if @aktion.music
+  .large-6.columns.review-item= "#{Aktion.checkmark(@aktion.dancing)} Dancing" if @aktion.dancing
+  .large-6.columns.review-item= "#{Aktion.checkmark(@aktion.soccer)} Soccer" if @aktion.soccer
+  .large-6.columns.review-item= "#{Aktion.checkmark(@aktion.change)} Change Stuff" if @aktion.change
+  .large-6.columns.review-item= "#{Aktion.checkmark(@aktion.reading)} Reading" if @aktion.reading
+  .large-6.columns.review-item= "#{Aktion.checkmark(@aktion.podcast)} Podcast" if @aktion.podcast
+  .large-12.columns.review-item= @aktion.other if @aktion.other

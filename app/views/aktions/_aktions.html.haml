@@ -1,0 +1,18 @@
+%table#aktions-table.compact
+  %thead
+    %tr
+      %th Time
+      %th Status
+      %th Focus
+      %th Verb
+      %th Team
+      %th Role
+      %th Int.
+      %th Flow
+      %th Value
+      %th
+  %tbody
+    - if aktions
+      = render aktions
+    - else
+      = "No Actions"

@@ -1,0 +1,53 @@
+- day = Time.zone.now.in_time_zone(tz).to_date
+- if player_signed_in?
+  %li= link_to 'MY DASHBOARD', player_aktions_path(player_id: current_player.id, date: day)
+  - current_aktion = Aktion.current(current_player)
+  - if current_aktion
+    %li.light-red-text= link_to "CURRENT", edit_aktion_path(id: current_aktion.id)
+  %li
+    %a{"data-dropdown" => "hover4", "data-options" => "is_hover:true; hover_timeout:200", href: "#{starting_path}"}
+      .light-red-text START ACTION
+    %ul#hover4.f-dropdown.medium{"data-dropdown-content" => ""}
+      - if current_aktion
+        %li.dropdown_item= link_to "CONTINUE", new_aktion_path(previous_aktion_id: current_aktion.id)
+      - current_player.my_teams.each do |team|
+        %li.dropdown_item= link_to "=> #{team.name}", new_aktion_path(team_id: team.id), {style: "color: #{team.color(current_player)}"}
+      %hr
+      - current_player.frequent_actions_with_counts.first(10).each do |a, count|
+        %li.dropdown_item= link_to "#{a.summary} (#{count})", new_aktion_path(previous_aktion_id: a.id), {style: "color: #{a.color}"}
+  %li
+    %a{"data-dropdown" => "hover2", "data-options" => "is_hover:true; hover_timeout:200", href: "#{teams_path}"}
+      = 'VIEW TEAMS'
+    %ul#hover2.f-dropdown.tiny{"data-dropdown-content" => ""}
+      - current_player.my_teams.each do |team|
+        %li.dropdown_item= link_to team.name, team, {style: "color: #{team.color(current_player)}"}
+  %li
+    %a{"data-dropdown" => "hover1", "data-options" => "is_hover:true; hover_timeout:200", href: "#{player_path(current_player)}"}
+      / .green-text= current_player.first_name
+      = image_tag(current_player.gravatar(24))
+      = current_player.first_name
+    %ul#hover1.f-dropdown.tiny{"data-dropdown-content" => ""}
+      %li.text-right.dropdown_item= link_to 'Settings', edit_player_path(current_player)
+      %li.text-right.dropdown_item= link_to 'Profile', current_player
+      %li.text-right.dropdown_item= link_to "Sign out #{current_player.first_name}", signout_path
+      %hr
+      %li.text-right.dropdown_item= link_to "My #{pluralize(current_player.accepted_challenges.active.count, 'Challenge')}", accepted_challenges_path(player_id: current_player.id)
+      %li.text-right.dropdown_item= link_to 'My Actions', player_aktions_path(player_id: current_player.id)
+      %li.text-right.dropdown_item= link_to 'My Roles', roles_path
+      %li.text-right.dropdown_item= link_to 'My Projects', projects_path
+      %li.text-right.dropdown_item= link_to 'My Insights', insights_path
+      %hr
+      %li.text-right.dropdown_item= link_to 'All Players', players_path
+      %hr
+      = render 'layouts/sound_dropdown_items'
+  %li= link_to image_tag('settings.png', height: 16, width: 16), edit_player_path(current_player)
+- else
+  %li
+    %a{"data-dropdown" => "hover3", "data-options" => "is_hover:true; hover_timeout:200", href: ""}
+      - session[:sound_choice] ||= 'ticking'
+      = session[:sound_choice].upcase
+    %ul#hover3.f-dropdown.tiny{"data-dropdown-content" => ""}
+      = render 'layouts/sound_dropdown_items'
+  %li.green-text= link_to 'Sign in with Google', signin_path
+/ %li= link_to 'HELP', contact_path #'https://playfullyproductive.zendesk.com/hc/en-us'
+/ %li= link_to 'SCORES', scores_path

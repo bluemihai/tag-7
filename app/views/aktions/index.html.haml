@@ -1,0 +1,95 @@
+%h4= "#{@player.name}'s #{@actions.count rescue 0} Actions"
+= link_to 'ALL', aktions_path
+\-
+= link_to 'TODAY', aktions_path(date: Time.zone.now.to_date)
+\-
+= link_to 'YESTERDAY', aktions_path(date: Time.zone.now.to_date - 1.day)
+\-
+= link_to 'THIS WEEK', aktions_path(week: Time.zone.now.at_beginning_of_week.to_date)
+\-
+= link_to 'LAST WEEK', aktions_path(week: Time.zone.now.at_beginning_of_week.to_date - 1.week)
+\-
+= link_to 'THIS MONTH', aktions_path(month: Time.zone.now.at_beginning_of_month.to_date)
+.clear-both
+%hr
+
+.large-2.medium-4.small-6.columns
+  %h5= "By Team"
+  - by_team_hash = @actions.group_by{ |a| a.team_id }
+  - by_team_hash.each{ |team_id, actions| by_team_hash[team_id] = actions.count }
+  - Hash[by_team_hash.sort_by{|k, v| v}.reverse].each do |team_id, actions_count|
+    - team = Team.find_by_id(team_id)
+    = actions_count
+    = team.name rescue 'No Team'
+    %br
+  %h5 By Action Score
+  - by_score_hash = @actions.group_by{ |a| a.score }
+  - by_score_hash.each{ |score, actions| by_score_hash[score] = actions.count }
+  - Hash[by_score_hash.sort.reverse].each do |score, actions_count|
+    = actions_count
+    = "#{INTEGRITY_SCORES[score]} (+#{score})"
+    %br
+- scale_hash = FLOW_VALUE_OPTIONS.to_h.invert
+.large-2.medium-4.small-6.columns
+  / %h5= "By Flow Score"
+  / - by_flow_hash = @actions.group_by{ |a| a.flow }
+  / - by_flow_hash.each{ |flow, actions| by_flow_hash[flow] = actions.count }
+  / - Hash[by_flow_hash.sort.reverse].each do |flow, actions_count|
+  /   = actions_count
+  /   = "#{scale_hash[flow]} (#{flow})"
+  /   %br
+  / %h5= "By Value Score"
+  / - by_value_hash = @actions.group_by{ |a| a.value }
+  / - by_value_hash.each{ |value, actions| by_value_hash[value] = actions.count }
+  / - Hash[by_value_hash.sort.reverse].each do |value, actions_count|
+  /   = actions_count
+  /   = "#{scale_hash[value]} (+#{value})"
+  /   %br
+.large-2.medium-4.small-6.columns
+  %h5 By Role
+  - by_role_hash = @actions.group_by{ |a| a.role_id }
+  - by_role_hash.each{ |role_id, actions| by_role_hash[role_id] = actions.count }
+  - Hash[by_role_hash.sort_by{|k, v| v}.reverse].each do |role_id, actions_count|
+    - role = Role.find_by_id(role_id)
+    = actions_count
+    = link_to role.short_team_role, role rescue 'Role Missing'
+    %br
+.large-3.medium-6.small-6.columns
+  %h5 By Project
+  - by_project_hash = @actions.group_by{ |a| a.project_id }
+  - by_project_hash.each{ |project_id, actions| by_project_hash[project_id] = actions.count }
+  - Hash[by_project_hash.sort_by{|k, v| v}.reverse].each do |project_id, actions_count|
+    - project = Project.find_by_id(project_id)
+    = actions_count
+    = link_to project.short_team_project, project rescue 'Project Missing'
+    %br
+.large-3.medium-6.small-6.columns
+  %h5 By Verb
+  - by_verb_hash = @actions.group_by{ |a| a.verb_id }
+  - by_verb_hash.each{ |verb_id, actions| by_verb_hash[verb_id] = actions.count }
+  - Hash[by_verb_hash.sort_by{|k, v| v}.reverse].each do |verb_id, actions_count|
+    - verb = Verb.find_by_id(verb_id)
+    = actions_count
+    = link_to verb.name, verb rescue 'Verb Missing'
+    %br
+
+.clear-both
+
+- if params[:date]
+  = render 'daily', aktions: @actions
+- elsif params[:week]
+  = render 'weekly', aktions: @actions
+- elsif params[:month]
+  = render 'monthly', aktions: @actions
+
+%hr
+%h4= "#{@actions.try(:count) || 0} #{I18n.t 'Aktions'}"
+= render 'aktions', aktions: @actions
+
+%hr
+%h4= "#{@actions.try(:count) || 0} Detailed #{I18n.t 'Aktions'}"
+
+- if @actions
+  .detailed-actions-container
+    - @actions.each do |action|
+      = render 'detailed_action', action: action

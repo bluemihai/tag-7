@@ -1,0 +1,23 @@
+- if params.has_key?(:edit) || @aktion.status == 'stopped'
+  .large-12.columns
+    .focus-label Actual Focus:
+    .focus-input= f.input :focus, label: false
+  .large-4.medium-4.small-4.columns.bigger= 'FLOW'
+  .large-8.medium-8.small-8.columns= f.input :flow, collection: FLOW_VALUE_OPTIONS, label: false, autofocus: true
+  .large-12.columns= f.input :flow_notes, label: false, input_html: {rows: 5}, placeholder: FLOW_PLACEHOLDER
+  .large-4.medium-4.small-4.columns.bigger= 'VALUE'
+  .large-8.medium-8.small-8.columns= f.input :value, collection: FLOW_VALUE_OPTIONS, label: false
+  .large-12.columns= f.input :value_notes, label: false, input_html: {rows: 5}, placeholder: VALUE_PLACEHOLDER
+  .large-12.medium-12.small-12.columns.text-right.review-button= f.button :submit, "SAVE"
+  / - if current_player.review_first
+  /   .large-12.medium-12.columns= f.input :intensity, collection: INTENSITIES, include_blank: true, prompt: INTENSITY_PROMPT, label: false
+- elsif @aktion.status == 'reviewed' || @aktion.status == 'finished'
+  .large-12.columns.review-item
+    %span.bold Status:
+    %span= aktion.status_full
+  .large-12.columns.review-item
+    %span.bold= "Flow #{aktion.flow_str}:"
+    %span= "#{aktion.flow_notes}"
+  .large-12.columns.review-item
+    %span.bold= "Value #{aktion.value_str}:"
+    %span= "#{aktion.value_notes}"

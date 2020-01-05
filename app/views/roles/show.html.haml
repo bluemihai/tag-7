@@ -1,0 +1,13 @@
+%h4= "Role: #{@role.name}"
+
+%p
+  %b Team:
+  = @role.team.name
+%p
+  %b Fillers:
+  = @role.players.map(&:name).join(', ')
+
+%p
+  %b Description/Accountabilities:
+  = simple_format @role.description
+

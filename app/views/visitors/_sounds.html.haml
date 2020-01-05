@@ -1,0 +1,9 @@
+%hr
+- current_player.try(:sound_choice) || session[:sound_choice]
+- if session[:sound_choice] == 'nature'
+  %iframe.media{src: 'http://naturesoundsfor.me/rain-with-birds'}
+- elsif session[:sound_choice] == 'silence'
+  You have selected silence
+- elsif session[:sound_choice] == 'music'
+  %h4 We have selected baroque music, per David Allan's suggestion in Getting Things Done.
+  %iframe{:allowfullscreen => "", :frameborder => "0", :height => "315", :src => "https://www.youtube.com/embed/jjnyeZLNb3E?start=#{rand_seconds(120)}&autoplay=1", :width => "560"}

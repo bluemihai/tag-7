@@ -1,0 +1,32 @@
+%h4= "Membership #{@team_membership.player.name} => #{@team_membership.team.name}"
+
+%p
+  %b API key:
+  = @team_membership.api_key
+%p
+  %b External ID:
+  = @team_membership.external_id
+
+%hr
+
+.large-3.columns
+  %h4 API Roles
+  - @team_membership.roles_from_api.each do |role|
+    = link_to "#{role['name']} (#{role['id']})", "http://glassfrog.holacracy.org/roles/#{role['id']}"
+    %br
+
+  %hr
+  %h4 API Circles
+  - @team_membership.circles_from_api.each do |circle|
+    = link_to circle[:name], "http://glassfrog.holacracy.org/circles/#{circle[:id]}"
+    %br
+
+.large-9.columns
+  %h4
+    TAG Roles
+    = link_to '(Update from API)', update_from_api_team_membership_path
+
+  - @team_membership.roles.each do |role|
+    = link_to role.name, role, title: role.description
+    = link_to "(#{role.external_id ? role.external_id : 'no external id yet'})", edit_role_path(role)
+    %br

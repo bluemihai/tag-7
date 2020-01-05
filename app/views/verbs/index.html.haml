@@ -1,0 +1,26 @@
+%h1 Listing verbs
+
+%table
+  %thead
+    %tr
+      %th id
+      %th Name
+      %th Description
+      %th Examples
+      %th Level
+      %th
+      %th
+
+  %tbody
+    - @verbs.each do |verb|
+      %tr
+        %td= verb.id
+        %td= link_to verb.name, verb
+        %td= verb.description if verb.description
+        %td= verb.examples
+        %td= verb.level
+        %td= link_to 'Destroy', verb, :method => :delete, :data => { :confirm => 'Are you sure?' }
+
+%br
+
+= link_to 'New Verb', new_verb_path

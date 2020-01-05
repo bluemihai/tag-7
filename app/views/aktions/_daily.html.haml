@@ -1,0 +1,18 @@
+%hr
+%h4
+  = link_to '<<<', aktions_path(date: @date - 1.day)
+  ="#{@date.strftime('%a, %b-%d')} #{Time.zone.now.in_time_zone(@player.current_time_zone).strftime('%Z')}"
+  = link_to '>>>', aktions_path(date: @date + 1.day)
+- actions_by_part_of_day = Player.todays_grid(@player.current_time_zone, @date).in_groups_of(12)
+- actions_by_part_of_day.each_with_index do |part_of_days_slots, idx|
+  - if current_player.actions_before_6am(@date).count > 0
+    .large-3.medium-3.small-12.columns.no-gutter
+      %h5.large-12.text-center= PARTS_OF_DAY[idx]
+      - part_of_days_slots.each do |slot|
+        .slot= render 'slot', slot: slot
+  - else
+    - unless idx == 0
+      .large-4.medium-4.small-12.columns.no-gutter
+        %h5.large-12.text-center= PARTS_OF_DAY[idx]
+        - part_of_days_slots.each do |slot|
+          .slot= render 'slot', slot: slot

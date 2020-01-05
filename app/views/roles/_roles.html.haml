@@ -1,0 +1,22 @@
+%h5
+  Roles
+  - if team
+    = link_to "(New for #{team.name})", new_team_role_path(team)
+  - else
+    = link_to "(New)", new_role_path
+
+.large-12.medium-12.small-12.columns
+  %table#roles-table.compact
+    %thead
+      %tr
+        %th
+        %th Tm
+        %th Name
+        %th Actions
+        %th Last Energized
+        %th
+        %th
+        %th
+
+    %tbody
+      = render roles, team: team

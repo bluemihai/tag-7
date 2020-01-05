@@ -1,0 +1,21 @@
+%h3
+  = mine ? 'My Teams' : 'Other Teams'
+  - if player_signed_in?
+    = link_to '(Add)', mine ? new_team_path(creator_id: @current_player.try(:id)) : new_team_path
+
+- if teams.try(:first)
+  - table_id = mine ? 'my-teams' : 'other-teams'
+  %table.compact{id: "#{table_id}"}
+    %thead
+      %tr
+        %th
+        %th Name
+        %th Short
+        %td Players
+        %td Roles
+        %td Projects
+        %th Aktions
+        %th
+        %th
+    %tbody
+      = render teams

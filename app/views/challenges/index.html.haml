@@ -1,0 +1,39 @@
+%h1 All Challenges
+
+%table
+  %thead
+    %tr
+      %th
+      %th id
+      %th Description
+      %th Comments
+      %th Accepted By
+      - if current_player.admin?
+        %td Available
+        %td Creator
+        %th
+        %th
+        %th
+
+  %tbody
+    - @challenges.each do |challenge|
+      %tr
+        - ac = challenge.accepted_by(current_player)
+        - if ac.first
+          %td.blue-text= link_to 'ALREADY ACCEPTED', ac.first
+        - else
+          %td.green-text= link_to 'ACCEPT', new_accepted_challenge_path(challenge_id: challenge.id, player_id: current_player.id, active: true)
+        %td= challenge.id
+        %td= challenge.description
+        %td= challenge.comments
+        %td= challenge.accepted_challenges.map{ |ac| ac.player.first_name }.join(', ') rescue 'Error'
+        - if current_player.admin?
+          %td= challenge.available
+          %td= challenge.creator.try(:first_name)
+          %td= link_to 'Show', challenge
+          %td= link_to 'Edit', edit_challenge_path(challenge)
+          %td= link_to 'Destroy', challenge, :method => :delete, :data => { :confirm => 'Are you sure?' }
+
+%br
+- if current_player.admin?
+  .button.white-text= link_to 'New Challenge', new_challenge_path
